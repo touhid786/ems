@@ -1,5 +1,4 @@
-package com.codingshuttle.TestingApp.services.impl;
-
+package com.codingshuttle.TestingApp.serviceImpls;
 
 import com.codingshuttle.TestingApp.dto.EmployeeDto;
 import com.codingshuttle.TestingApp.entities.Employee;
@@ -12,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -81,5 +81,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         employeeRepository.deleteById(id);
         log.info("Successfully deleted employee with id: {}", id);
+    }
+
+    @Override
+    public List<EmployeeDto> getAllEmployees() {
+        log.info("Fetching all employees");
+        List<Employee> employees = employeeRepository.findAll();
+        return employees.stream()
+                .map(employee -> modelMapper.map(employee, EmployeeDto.class))
+                .collect(Collectors.toList());
     }
 }
